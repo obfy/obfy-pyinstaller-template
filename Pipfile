@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+# Build-time tooling only. These are NOT bundled into the final executable —
+# obfy's native runtime is packaged into ./protected by `obfy build`, and
+# PyInstaller bundles that. Add your app's own runtime deps here too so
+# PyInstaller can discover and bundle them.
+[packages]
+obfy = "*"
+pyinstaller = "==6.12.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
+
+[scripts]
+build = "bash build.sh"
