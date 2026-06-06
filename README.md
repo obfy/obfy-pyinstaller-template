@@ -91,6 +91,23 @@ Run the result:
   import because the loader is imported dynamically at runtime. The decryption
   happens in memory at import time; plaintext source is never written to disk.
 
+## Obfy level
+
+`obfy build` takes `--level 0–5`, a sophistication dial where each level does
+strictly more — `1` strips docstrings, `2` adds string mangling + dead code, `3`
+adds function-local renames, `4` adds cross-module public-name renames, and `5`
+adds **native function compilation**: eligible functions are lowered to obfy's own
+bytecode VM, so their CPython bytecode never ships (a decrypted module shows only
+stubs, with nothing to `marshal.loads` + `dis`). Reference:
+[obfuscation levels](https://docs.camouflage.network/obfy/guides/obfuscation-levels).
+
+**This template builds at `--level 5`** — the maximum. A PyInstaller binary is a
+self-contained app with no framework resolving names by string, so the most
+aggressive setting is safe here. Functions the ISA doesn't yet cover fall back to
+level-4 encrypted marshal automatically, so the build never breaks. If a
+dependency does dynamic name/attribute lookups that renaming would break, lower
+`--level` in `build.sh`.
+
 ## Customizing
 
 - **Your code:** put it under `src/app/` (or add packages alongside it) and import
